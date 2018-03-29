@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>rabbits</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        #main {
+            display: flex;
+            flex-flow: row wrap;
+            background-color: white;
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+  }
+ 	 #main{
+		display:flex;
+		flex-flow:row wrap;
+    
+  	}
+  
+    .rabbit{
+      background: url("rabbit.PNG") no-repeat center center;
+      background-size: contain;
+      height: 50px;
+      width: 50px;
+      
+    }
+  </style>  
+ </head>
+=======
+=======
+>>>>>>> master
+        }
+        #counter {
+            position: absolute;
+            display: block;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: Times sans-serif;
+            font-size: 50vh;
+            color: rgba(255,255,255,0.6);
+        }
+        .rabbit {
+            position: relative;
+            overflow: hidden;
+        }
+        .rabbit .sprite{
+            position: absolute;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            width: 200%;
+            height: 100%;
+            background: url("rabit-1x1.png") repeat-x center center;
+            background-size: contain;
+            transform: translate3d(-100%,0,0);
+            animation: animated-background 5s infinite linear;
+        }
+        .rabbit .sprite span{
+            display: block;
+            position: relative;
+            width: 50%;
+            height: 1em;
+            font-size: 1em;
+            line-height: 1em;
+            text-align: center;
+            top: 14%;
+            left: -12%;
+            transform: rotate(-41deg);
+            color: rgba(0,0,0,0.1);
+        }
+        .rabbit .sprite span:before{
+            content: '';
+            display: block;
+            position: absolute;
+            width: 1.5em;
+            height: 1em;
+            transform: translate(200%, 0);
+            background: #303030;
+            border-radius: 1em 0 0 1em;
+            z-index: -1;
+        }
+
+        @keyframes animated-background {
+            from {
+                transform: translate3d(-50%,0,0);
+            }
+            to {
+                transform: translate3d(0%,0,0);
+            }
+        }
+    </style>
+</head>
+<<<<<<< HEAD
+>>>>>>> bc8a2bc1a60a1aa581c5946d20cfde1184a5ddc9
+=======
+>>>>>>> master
+<body>
+    <div id="main"></div>
+    <div id="counter"></div>
+    <template id="rabbit-template">
+        <div class="rabbit">
+            <div class="sprite">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </template>
+    <script>
+	var mainBox = document.getElementById("main")
+    const counterDisplay = document.getElementById('counter')
+
+    const rabbits = []
+    var rabbitSize = 120
+	var totalNumber = 0
+	window.addEventListener('resize', update)
+	update()
+
+	function update(){
+		var rabbitsData = countRabbits(rabbitSize)
+		counterDisplay.innerText = rabbitsData.number
+		rabbitsData.number = rabbitsData.number - totalNumber
+		if( rabbitsData.number > 0 ){
+			drawRabbits(rabbitsData)
+			totalNumber += rabbitsData.number
+		}
+		resizeRabbits(rabbitsData.size)
+	}
+
+	function drawRabbits( rabbitsData ){
+		for( var i = 0; i < rabbitsData.number; i ++ ){
+			const r = random(255)
+			const g = random(255)
+			const b = random(255)
+            const hsl = rgbToHsl(r, g, b)
+
+			const template = document.getElementById('rabbit-template')
+			const clone = document.importNode(template.content, true);
+			const element = clone.firstElementChild
+			element.style.width = rabbitsData.size + 'px'
+			element.style.height = rabbitsData.size + 'px'
+			element.style.backgroundColor = 'hsl('+ hsl.h +','+ hsl.s +'%,'+ hsl.l +'%)'
+            element.querySelectorAll('.sprite span').forEach(function(el){
+            	el.innerText = rabbits.length + 1
+                el.style.color = 'hsl('+ (hsl.h+180)%360 +','+ hsl.s +'%,' + hsl.l +'%)'
+            })
+			mainBox.appendChild(element)
+			rabbits.push(element)
+		}
+	}
+
+	function resizeRabbits( size ){
+		rabbits.forEach(function( el ){
+			el.style.width = size + 'px'
+			el.style.height = size + 'px'
+        })
+    }
+
+	function random255(){
+		return Math.round(Math.random() * 255)
+	}
+
+	function random(n){
+		return Math.round(Math.random() * n)
+	}
+
+	function countRabbits( rabbitSize ){
+		var winH = window.innerHeight
+		var winW = window.innerWidth
+
+		var rabbitsInW = Math.round(winW / rabbitSize)
+		var actualRabbitSize = winW / rabbitsInW
+		var rabbitsInH = Math.ceil(winH / actualRabbitSize)
+
+		return {size: actualRabbitSize, number: rabbitsInW * rabbitsInH}
+	}
+	/**
+     * @link https://gist.github.com/mjackson/5311256
+	 * Converts an RGB color value to HSL. Conversion formula
+	 * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+	 * Assumes r, g, and b are contained in the set [0, 255] and
+	 * returns h, s, and l in the set [0, 1].
+	 *
+	 * @param   {Number}  r       The red color value
+	 * @param   {Number}  g       The green color value
+	 * @param   {Number}  b       The blue color value
+	 * @return  {object}          The HSL representation
+	 */
+	function rgbToHsl(r, g, b) {
+		r /= 255
+        g /= 255
+        b /= 255
+
+		var max = Math.max(r, g, b), min = Math.min(r, g, b);
+		var h, s, l = (max + min) / 2
+
+		if (max === min) {
+			h = s = 0 // achromatic
+		} else {
+			var d = max - min
+			s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+
+			switch (max) {
+				case r: h = (g - b) / d + (g < b ? 6 : 0)
+                    break
+				case g: h = (b - r) / d + 2
+                    break
+				case b: h = (r - g) / d + 4
+                    break
+			}
+			h /= 6;
+		}
+		return { h: h*360, s: s*100, l: l*100 };
+	}
+    </script>
+</body>
+</html>

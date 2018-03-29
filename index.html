@@ -40,21 +40,21 @@
   	var rabitSize = 120; 
     var totalNumber = 0;
     window.addEventListener('resize', function(){
-      drawController();
+      update();
     });
-    drawController();
+    update();
 
-    function drawController(){
-      var rabits=countRabits(rabitSize);
-      rabits.number = rabits.number - totalNumber;
-      if (rabits.number > 0){
-        drawRabits(rabits);
-        totalNumber += rabits.number; 
+    function update(){
+      var rabbits=countRabbits(rabitSize);
+      rabbits.number = rabbits.number - totalNumber;
+      if (rabbits.number > 0){
+        drawRabbits(rabbits);
+        totalNumber += rabbits.number; 
         console.log(totalNumber);
       }
     }
 
-    function drawRabits(rabbits){
+    function drawRabbits(rabbits){
         for(var i=0; i<rabbits.number;i++){
         var div=document.createElement('div');
         mainBox.appendChild(div);
@@ -70,7 +70,7 @@ function random255(){
   return Math.round(Math.random()*255)
 }
 
-function countRabits(rabitSize){
+function countRabbits(rabitSize){
   var winH = window.innerHeight;
   var winW = window.innerWidth;
 
